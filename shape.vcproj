@@ -80,7 +80,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;copy $(ProjectDir)shapefil.h include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;"
+				CommandLine="REM pushd works for case where $(SolutionDir) is a UNC path (cd doesn&apos;t work)&#x0D;&#x0A;pushd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;REM triple quotes for case where $(ProjectDir) is a UNC path with spaces&#x0D;&#x0A;copy &quot;&quot;&quot;$(ProjectDir)shapefil.h&quot;&quot;&quot; include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;popd"
 			/>
 		</Configuration>
 		<Configuration
@@ -146,7 +146,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;copy $(ProjectDir)shapefil.h include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;"
+				CommandLine="REM pushd works for case where $(SolutionDir) is a UNC path (cd doesn&apos;t work)&#x0D;&#x0A;pushd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;REM triple quotes for case where $(ProjectDir) is a UNC path with spaces&#x0D;&#x0A;copy &quot;&quot;&quot;$(ProjectDir)shapefil.h&quot;&quot;&quot; include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;popd"
 			/>
 		</Configuration>
 		<Configuration
@@ -208,7 +208,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;copy $(ProjectDir)shapefil.h include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;"
+				CommandLine="REM pushd works for case where $(SolutionDir) is a UNC path (cd doesn&apos;t work)&#x0D;&#x0A;pushd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;REM triple quotes for case where $(ProjectDir) is a UNC path with spaces&#x0D;&#x0A;copy &quot;&quot;&quot;$(ProjectDir)shapefil.h&quot;&quot;&quot; include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;popd"
 			/>
 		</Configuration>
 		<Configuration
@@ -271,7 +271,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;copy $(ProjectDir)shapefil.h include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;"
+				CommandLine="REM pushd works for case where $(SolutionDir) is a UNC path (cd doesn&apos;t work)&#x0D;&#x0A;pushd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;REM triple quotes for case where $(ProjectDir) is a UNC path with spaces&#x0D;&#x0A;copy &quot;&quot;&quot;$(ProjectDir)shapefil.h&quot;&quot;&quot; include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;popd"
 			/>
 		</Configuration>
 		<Configuration
@@ -332,7 +332,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;copy $(ProjectDir)shapefil.h include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;"
+				CommandLine="REM pushd works for case where $(SolutionDir) is a UNC path (cd doesn&apos;t work)&#x0D;&#x0A;pushd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;REM triple quotes for case where $(ProjectDir) is a UNC path with spaces&#x0D;&#x0A;copy &quot;&quot;&quot;$(ProjectDir)shapefil.h&quot;&quot;&quot; include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;popd"
 			/>
 		</Configuration>
 		<Configuration
@@ -394,7 +394,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;copy $(ProjectDir)shapefil.h include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;"
+				CommandLine="REM pushd works for case where $(SolutionDir) is a UNC path (cd doesn&apos;t work)&#x0D;&#x0A;pushd $(SolutionDir)&#x0D;&#x0A;if exist include\shape goto theend&#x0D;&#x0A;mkdir include\shape&#x0D;&#x0A;echo &quot;Copying file(s) into include\shape&quot;&#x0D;&#x0A;REM triple quotes for case where $(ProjectDir) is a UNC path with spaces&#x0D;&#x0A;copy &quot;&quot;&quot;$(ProjectDir)shapefil.h&quot;&quot;&quot; include\shape&#x0D;&#x0A;:theend&#x0D;&#x0A;popd"
 			/>
 		</Configuration>
 	</Configurations>
