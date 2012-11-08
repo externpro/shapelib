@@ -1,7 +1,6 @@
 
 #LINKOPT	=	/usr/local/lib/libdbmalloc.a
 CFLAGS	=	-g
-LIBPATH = -L/usr/lib
 
 default:	all
 
@@ -98,30 +97,30 @@ test3:
 
 SHPLIB_VERSION=1.2.9
 LIBSHP_VERSION=1.0.1 # still once to be changed manually (see for 1:1:0), sorry
-OUTTYPE=dylib
+
 lib:
-	/bin/sh ./libtool --mode=compile gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1  -I. -I. -I/usr/local/include $(LIBPATH)   -g -O2 -c shpopen.c
+	/bin/sh ./libtool --mode=compile gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1  -I. -I. -I/usr/local/include    -g -O2 -c shpopen.c
 	gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1 -I. -I. -I/usr/local/include -g -O2 -c  -fPIC -DPIC shpopen.c -o .libs/shpopen.lo
 	gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1 -I. -I. -I/usr/local/include -g -O2 -c shpopen.c -o shpopen.o >/dev/null 2>&1
 	mv -f .libs/shpopen.lo shpopen.lo
-	/bin/sh ./libtool --mode=compile gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1  -I. -I. -I/usr/local/include $(LIBPATH) -g -O2 -c shptree.c
+	/bin/sh ./libtool --mode=compile gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1  -I. -I. -I/usr/local/include    -g -O2 -c shptree.c
 	rm -f .libs/shptree.lo
 	gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1 -I. -I. -I/usr/local/include -g -O2 -c  -fPIC -DPIC shptree.c -o .libs/shptree.lo
 	gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1 -I. -I. -I/usr/local/include -g -O2 -c shptree.c -o shptree.o >/dev/null 2>&1
 	mv -f .libs/shptree.lo shptree.lo
-	/bin/sh ./libtool --mode=compile gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1  -I. -I. -I/usr/local/include $(LIBPATH) -g -O2 -c dbfopen.c
+	/bin/sh ./libtool --mode=compile gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1  -I. -I. -I/usr/local/include    -g -O2 -c dbfopen.c
 	rm -f .libs/dbfopen.lo
 	gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1 -I. -I. -I/usr/local/include -g -O2 -c  -fPIC -DPIC dbfopen.c -o .libs/dbfopen.lo
 	gcc -DPACKAGE=\"libshp\" -DVERSION=\"$(SHPLIB_VERSION)\" -DSTDC_HEADERS=1 -I. -I. -I/usr/local/include -g -O2 -c dbfopen.c -o dbfopen.o >/dev/null 2>&1
 	mv -f .libs/dbfopen.lo dbfopen.lo
-	/bin/sh ./libtool --mode=link gcc  -g -O2  -o libshp.la $(LIBPATH) -version-info 1:1:0 shpopen.lo shptree.lo dbfopen.lo  
+	/bin/sh ./libtool --mode=link gcc  -g -O2  -o libshp.la -rpath /usr/local/lib -version-info 1:1:0 shpopen.lo shptree.lo dbfopen.lo  
 	rm -fr .libs/libshp.la .libs/libshp.* .libs/libshp.*
 	rm -fr .libs/libshp.lax
 	mkdir .libs/libshp.lax
-	/usr/bin/gcc  -dynamiclib -o .libs/libshp.$(OUTTYPE).$(LIBSHP_VERSION)  shpopen.lo shptree.lo dbfopen.lo  -lc
+	/usr/bin/ld -G -h libshp.so.1 -o .libs/libshp.so.$(LIBSHP_VERSION)  shpopen.lo shptree.lo dbfopen.lo  -lc
 
-	(cd .libs && rm -f libshp.$(OUTTYPE).1 && ln -s libshp.$(OUTTYPE).$(LIBSHP_VERSION) libshp.$(OUTTYPE).1)
-	(cd .libs && rm -f libshp.$(OUTTYPE) && ln -s libshp.$(OUTTYPE).$(LIBSHP_VERSION) libshp.$(OUTTYPE))
+	(cd .libs && rm -f libshp.so.1 && ln -s libshp.so.$(LIBSHP_VERSION) libshp.so.1)
+	(cd .libs && rm -f libshp.so && ln -s libshp.so.$(LIBSHP_VERSION) libshp.so)
 	ar cru .libs/libshp.a  shpopen.o shptree.o dbfopen.o 
 	ranlib .libs/libshp.a
 	rm -fr .libs/libshp.lax
@@ -131,10 +130,10 @@ lib_install:
 	cp .libs/libshp.la .libs/libshp.lai
 	/bin/sh ./mkinstalldirs /usr/local/lib
 	/bin/sh ./libtool  --mode=install /usr/bin/install -c libshp.la /usr/local/lib/libshp.la
-	/usr/bin/install -c .libs/libshp.$(OUTTYPE).$(LIBSHP_VERSION) /usr/local/lib/libshp.$(OUTTYPE).$(LIBSHP_VERSION)
-	(cd /usr/local/lib && rm -f libshp.$(OUTTYPE).1 && ln -s libshp.$(OUTTYPE).$(LIBSHP_VERSION) libshp.$(OUTTYPE).1)
-	(cd /usr/local/lib && rm -f libshp.$(OUTTYPE) && ln -s libshp.$(OUTTYPE).$(LIBSHP_VERSION) libshp.$(OUTTYPE))
-	chmod +x /usr/local/lib/libshp.$(OUTTYPE).$(LIBSHP_VERSION)
+	/usr/bin/install -c .libs/libshp.so.$(LIBSHP_VERSION) /usr/local/lib/libshp.so.$(LIBSHP_VERSION)
+	(cd /usr/local/lib && rm -f libshp.so.1 && ln -s libshp.so.$(LIBSHP_VERSION) libshp.so.1)
+	(cd /usr/local/lib && rm -f libshp.so && ln -s libshp.so.$(LIBSHP_VERSION) libshp.so)
+	chmod +x /usr/local/lib/libshp.so.$(LIBSHP_VERSION)
 	/usr/bin/install -c .libs/libshp.la /usr/local/lib/libshp.la
 	/usr/bin/install -c .libs/libshp.a /usr/local/lib/libshp.a
 	ranlib /usr/local/lib/libshp.a
