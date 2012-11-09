@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 2.8.5)
+include(flags OPTIONAL)
+project(shapelib)
 set(lib_name shape)
 #######################################
 # preprocessor
