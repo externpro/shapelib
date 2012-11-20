@@ -22,5 +22,5 @@ set(${lib_name}_libsrcs
 add_library(${lib_name} STATIC ${${lib_name}_libsrcs})
 #######################################
 # install
-install(TARGETS ${lib_name} DESTINATION lib)
+install(TARGETS ${lib_name} DESTINATION lib${NUMBITS})
 install(FILES shapefil.h DESTINATION include/shape)
