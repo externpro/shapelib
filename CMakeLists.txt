@@ -23,9 +23,9 @@ add_library(${lib_name} STATIC ${${lib_name}_libsrcs})
 #######################################
 # install
 install(TARGETS ${lib_name} EXPORT ${PROJECT_NAME}-targets
-  RUNTIME DESTINATION bin${NUMBITS}
-  LIBRARY DESTINATION lib${NUMBITS}
-  ARCHIVE DESTINATION lib${NUMBITS}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
   )
 install(FILES shapefil.h DESTINATION include/shape)
-install(EXPORT ${PROJECT_NAME}-targets DESTINATION lib${NUMBITS}/cmake)
+install(EXPORT ${PROJECT_NAME}-targets DESTINATION lib/cmake)
