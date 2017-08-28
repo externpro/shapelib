@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: shprewind.c,v 1.2 2002/04/10 17:23:11 warmerda Exp $
+ * $Id: shprewind.c,v 1.4 2004-09-26 20:09:35 fwarmerdam Exp $
  *
  * Project:  Shapelib
  * Purpose:  Utility to validate and reset the winding order of rings in
@@ -35,6 +35,12 @@
  ******************************************************************************
  *
  * $Log: shprewind.c,v $
+ * Revision 1.4  2004-09-26 20:09:35  fwarmerdam
+ * avoid rcsid warnings
+ *
+ * Revision 1.3  2004/01/09 16:39:49  fwarmerdam
+ * include standard include files
+ *
  * Revision 1.2  2002/04/10 17:23:11  warmerda
  * copy from source to destination now
  *
@@ -43,6 +49,8 @@
  *
  */
 
+#include <string.h>
+#include <stdlib.h>
 #include "shapefil.h"
 
 int main( int argc, char ** argv )
@@ -90,7 +98,6 @@ int main( int argc, char ** argv )
 /* -------------------------------------------------------------------- */
     for( i = 0; i < nEntities; i++ )
     {
-	int		j;
         SHPObject	*psShape;
 
 	psShape = SHPReadObject( hSHP, i );

@@ -26,7 +26,7 @@
  *
  *
  * $Log: shpwkb.c,v $
- * Revision 1.1  1999/05/26 02:29:36  candrsn
+ * Revision 1.1  1999-05-26 02:29:36  candrsn
  * OGis Well Known Binary test program (output only)
  *
  *

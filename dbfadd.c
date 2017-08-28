@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: dbfadd.c,v 1.7 2002/01/15 14:36:07 warmerda Exp $
+ * $Id: dbfadd.c,v 1.9 2004-09-26 20:09:35 fwarmerdam Exp $
  *
  * Project:  Shapelib
  * Purpose:  Sample application for adding a record to an existing .dbf file.
@@ -34,6 +34,12 @@
  ******************************************************************************
  *
  * $Log: dbfadd.c,v $
+ * Revision 1.9  2004-09-26 20:09:35  fwarmerdam
+ * avoid rcsid warnings
+ *
+ * Revision 1.8  2004/01/09 16:39:49  fwarmerdam
+ * include standard include files
+ *
  * Revision 1.7  2002/01/15 14:36:07  warmerda
  * updated email address
  *
@@ -54,12 +60,13 @@
  *
  */
 
-static char rcsid[] = 
-  "$Id: dbfadd.c,v 1.7 2002/01/15 14:36:07 warmerda Exp $";
-
-#include "shapefil.h"
+#include <string.h>
 #include <math.h>
 #include <stdlib.h>
+
+#include "shapefil.h"
+
+SHP_CVSID("$Id: dbfadd.c,v 1.9 2004-09-26 20:09:35 fwarmerdam Exp $")
 
 int main( int argc, char ** argv )
 

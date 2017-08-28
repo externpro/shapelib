@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: shpcreate.c,v 1.5 2002/01/15 14:36:07 warmerda Exp $
+ * $Id: shpcreate.c,v 1.8 2007-12-30 16:57:33 fwarmerdam Exp $
  *
  * Project:  Shapelib
  * Purpose:  Sample application for creating a new shapefile.
@@ -34,6 +34,15 @@
  ******************************************************************************
  *
  * $Log: shpcreate.c,v $
+ * Revision 1.8  2007-12-30 16:57:33  fwarmerdam
+ * add support for z and m
+ *
+ * Revision 1.7  2004/09/26 20:09:35  fwarmerdam
+ * avoid rcsid warnings
+ *
+ * Revision 1.6  2004/01/09 16:39:49  fwarmerdam
+ * include standard include files
+ *
  * Revision 1.5  2002/01/15 14:36:07  warmerda
  * updated email address
  *
@@ -48,10 +57,11 @@
  *
  */
 
-static char rcsid[] = 
-  "$Id: shpcreate.c,v 1.5 2002/01/15 14:36:07 warmerda Exp $";
-
+#include <string.h>
+#include <stdlib.h>
 #include "shapefil.h"
+
+SHP_CVSID("$Id: shpcreate.c,v 1.8 2007-12-30 16:57:33 fwarmerdam Exp $")
 
 int main( int argc, char ** argv )
 
@@ -64,7 +74,7 @@ int main( int argc, char ** argv )
 /* -------------------------------------------------------------------- */
     if( argc != 3 )
     {
-	printf( "shpcreate shp_file [point/arc/polygon/multipoint]\n" );
+	printf( "shpcreate shp_file [point/arc/polygon/multipoint][/m/z]\n" );
 	exit( 1 );
     }
 
@@ -79,6 +89,24 @@ int main( int argc, char ** argv )
         nShapeType = SHPT_POLYGON;
     else if( strcmp(argv[2],"MULTIPOINT")==0 ||strcmp(argv[2],"multipoint")==0)
         nShapeType = SHPT_MULTIPOINT;
+    else if( strcmp(argv[2],"POINTZ") == 0 || strcmp(argv[2],"pointz") == 0 )
+        nShapeType = SHPT_POINTZ;
+    else if( strcmp(argv[2],"ARCZ") == 0 || strcmp(argv[2],"arcz") == 0 )
+        nShapeType = SHPT_ARCZ;
+    else if( strcmp(argv[2],"POLYGONZ") == 0 || strcmp(argv[2],"polygonz") == 0)
+        nShapeType = SHPT_POLYGONZ;
+    else if( strcmp(argv[2],"MULTIPOINTZ") == 0 
+             || strcmp(argv[2],"multipointz") == 0)
+        nShapeType = SHPT_MULTIPOINTZ;
+    else if( strcmp(argv[2],"POINTM") == 0 || strcmp(argv[2],"pointm") == 0 )
+        nShapeType = SHPT_POINTM;
+    else if( strcmp(argv[2],"ARCM") == 0 || strcmp(argv[2],"arcm") == 0 )
+        nShapeType = SHPT_ARCM;
+    else if( strcmp(argv[2],"POLYGONM") == 0 || strcmp(argv[2],"polygonm") == 0)
+        nShapeType = SHPT_POLYGONM;
+    else if( strcmp(argv[2],"MULTIPOINTM") == 0 
+             || strcmp(argv[2],"multipointm") == 0 )
+        nShapeType = SHPT_MULTIPOINTM;
     else
     {
 	printf( "Shape Type `%s' not recognised.\n", argv[2] );

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: shpadd.c,v 1.13 2002/01/15 14:36:07 warmerda Exp $
+ * $Id: shpadd.c,v 1.16 2010-06-21 20:41:52 fwarmerdam Exp $
  *
  * Project:  Shapelib
  * Purpose:  Sample application for adding a shape to a shapefile.
@@ -34,6 +34,15 @@
  ******************************************************************************
  *
  * $Log: shpadd.c,v $
+ * Revision 1.16  2010-06-21 20:41:52  fwarmerdam
+ * reformat white space
+ *
+ * Revision 1.15  2007-12-30 16:57:32  fwarmerdam
+ * add support for z and m
+ *
+ * Revision 1.14  2004/09/26 20:09:35  fwarmerdam
+ * avoid rcsid warnings
+ *
  * Revision 1.13  2002/01/15 14:36:07  warmerda
  * updated email address
  *
@@ -72,44 +81,68 @@
  *
  */
 
-static char rcsid[] = 
-  "$Id: shpadd.c,v 1.13 2002/01/15 14:36:07 warmerda Exp $";
-
 #include <stdlib.h>
 #include <string.h>
 #include "shapefil.h"
+
+SHP_CVSID("$Id: shpadd.c,v 1.16 2010-06-21 20:41:52 fwarmerdam Exp $")
 
 int main( int argc, char ** argv )
 
 {
     SHPHandle	hSHP;
     int		nShapeType, nVertices, nParts, *panParts, i, nVMax;
-    double	*padfX, *padfY;
+    double	*padfX, *padfY, *padfZ = NULL, *padfM = NULL;
     SHPObject	*psObject;
+    const char  *tuple = "";
+    const char  *filename;
 
 /* -------------------------------------------------------------------- */
 /*      Display a usage message.                                        */
 /* -------------------------------------------------------------------- */
     if( argc < 2 )
     {
-	printf( "shpadd shp_file [[x y] [+]]*\n" );
-	exit( 1 );
+        printf( "shpadd shp_file [[x y] [+]]*\n" );
+        printf( "  or\n" );
+        printf( "shpadd shp_file -m [[x y m] [+]]*\n" );
+        printf( "  or\n" );
+        printf( "shpadd shp_file -z [[x y z] [+]]*\n" );
+        printf( "  or\n" );
+        printf( "shpadd shp_file -zm [[x y z m] [+]]*\n" );
+        exit( 1 );
+    }
+
+    filename = argv[1];
+    argv++;
+    argc--;
+
+/* -------------------------------------------------------------------- */
+/*      Check for tuple description options.                            */
+/* -------------------------------------------------------------------- */
+    if( argc > 1 
+        && (strcmp(argv[1],"-z") == 0 
+            || strcmp(argv[1],"-m") == 0 
+            || strcmp(argv[1],"-zm") == 0) )
+    {
+        tuple = argv[1] + 1;
+        argv++;
+        argc--;
     }
 
 /* -------------------------------------------------------------------- */
 /*      Open the passed shapefile.                                      */
 /* -------------------------------------------------------------------- */
-    hSHP = SHPOpen( argv[1], "r+b" );
+    hSHP = SHPOpen( filename, "r+b" );
 
     if( hSHP == NULL )
     {
-	printf( "Unable to open:%s\n", argv[1] );
-	exit( 1 );
+        printf( "Unable to open:%s\n", filename );
+        exit( 1 );
     }
 
     SHPGetInfo( hSHP, NULL, &nShapeType, NULL, NULL );
 
-    if( argc == 2 )
+    if( argc == 1 )
         nShapeType = SHPT_NULL;
 
 /* -------------------------------------------------------------------- */
@@ -118,6 +151,11 @@ int main( int argc, char ** argv )
     nVMax = 1000;
     padfX = (double *) malloc(sizeof(double) * nVMax);
     padfY = (double *) malloc(sizeof(double) * nVMax);
+
+    if( strchr(tuple,'z') )
+        padfZ = (double *) malloc(sizeof(double) * nVMax);
+    if( strchr(tuple,'m') )
+        padfM = (double *) malloc(sizeof(double) * nVMax);
     
     nVertices = 0;
 
@@ -130,34 +168,42 @@ int main( int argc, char ** argv )
     nParts = 1;
     panParts[0] = 0;
 
-    for( i = 2; i < argc;  )
+    for( i = 1; i < argc;  )
     {
-	if( argv[i][0] == '+' )
-	{
-	    panParts[nParts++] = nVertices;
-	    i++;
-	}
-	else if( i < argc-1 )
-	{
+        if( argv[i][0] == '+' )
+        {
+            panParts[nParts++] = nVertices;
+            i++;
+        }
+        else if( i < argc-1-strlen(tuple) )
+        {
             if( nVertices == nVMax )
             {
                 nVMax = nVMax * 2;
                 padfX = (double *) realloc(padfX,sizeof(double)*nVMax);
                 padfY = (double *) realloc(padfY,sizeof(double)*nVMax);
+                if( padfZ )
+                    padfZ = (double *) realloc(padfZ,sizeof(double)*nVMax);
+                if( padfM )
+                    padfM = (double *) realloc(padfM,sizeof(double)*nVMax);
             }
 
-	    sscanf( argv[i], "%lg", padfX+nVertices );
-	    sscanf( argv[i+1], "%lg", padfY+nVertices );
-	    nVertices += 1;
-	    i += 2;
-	}
+            sscanf( argv[i++], "%lg", padfX+nVertices );
+            sscanf( argv[i++], "%lg", padfY+nVertices );
+            if( padfZ )
+                sscanf( argv[i++], "%lg", padfZ+nVertices );
+            if( padfM )
+                sscanf( argv[i++], "%lg", padfM+nVertices );
+                
+            nVertices += 1;
+        }
     }
 
 /* -------------------------------------------------------------------- */
 /*      Write the new entity to the shape file.                         */
 /* -------------------------------------------------------------------- */
     psObject = SHPCreateObject( nShapeType, -1, nParts, panParts, NULL,
-                                nVertices, padfX, padfY, NULL, NULL );
+                                nVertices, padfX, padfY, padfZ, padfM );
     SHPWriteObject( hSHP, -1, psObject );
     SHPDestroyObject( psObject );
     
@@ -166,6 +212,8 @@ int main( int argc, char ** argv )
     free( panParts );
     free( padfX );
     free( padfY );
+    free( padfZ );
+    free( padfM );
 
     return 0;
 }

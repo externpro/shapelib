@@ -27,7 +27,10 @@
  * 
  *
  * $Log: shpinfo.c,v $
- * Revision 1.3  2002/04/15 21:33:03  warmerda
+ * Revision 1.4  2011-07-24 03:17:46  fwarmerdam
+ * include string.h and stdlib.h where needed in contrib (#2146)
+ *
+ * Revision 1.3  2002-04-15 21:33:03  warmerda
  * Avoid dereference arrays.
  *
  * Revision 1.2  2002/04/15 18:40:31  warmerda
@@ -39,6 +42,8 @@
  *
  */
 
+#include <stdlib.h>
+#include <string.h>
 #include "shapefil.h"
 
 int main( int argc, char ** argv )

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: dbfdump.c,v 1.9 2002/01/15 14:36:07 warmerda Exp $
+ * $Id: dbfdump.c,v 1.12 2006-06-17 00:15:08 fwarmerdam Exp $
  *
  * Project:  Shapelib
  * Purpose:  Sample application for dumping .dbf files to the terminal.
@@ -34,6 +34,15 @@
  ******************************************************************************
  *
  * $Log: dbfdump.c,v $
+ * Revision 1.12  2006-06-17 00:15:08  fwarmerdam
+ * Free panWidth for better memory testing.
+ *
+ * Revision 1.11  2006/02/15 01:11:27  fwarmerdam
+ * added reporting of native type
+ *
+ * Revision 1.10  2004/09/26 20:09:35  fwarmerdam
+ * avoid rcsid warnings
+ *
  * Revision 1.9  2002/01/15 14:36:07  warmerda
  * updated email address
  *
@@ -60,12 +69,11 @@
  *
  */
 
-static char rcsid[] = 
-  "$Id: dbfdump.c,v 1.9 2002/01/15 14:36:07 warmerda Exp $";
-
 #include <stdlib.h>
 #include <string.h>
 #include "shapefil.h"
+
+SHP_CVSID("$Id: dbfdump.c,v 1.12 2006-06-17 00:15:08 fwarmerdam Exp $")
 
 int main( int argc, char ** argv )
 
@@ -134,6 +142,9 @@ int main( int argc, char ** argv )
         {
             DBFFieldType	eType;
             const char	 	*pszTypeName;
+            char chNativeType;
+
+            chNativeType = DBFGetNativeFieldType( hDBF, i );
 
             eType = DBFGetFieldInfo( hDBF, i, szTitle, &nWidth, &nDecimals );
             if( eType == FTString )
@@ -145,8 +156,8 @@ int main( int argc, char ** argv )
             else if( eType == FTInvalid )
                 pszTypeName = "Invalid";
 
-            printf( "Field %d: Type=%s, Title=`%s', Width=%d, Decimals=%d\n",
-                    i, pszTypeName, szTitle, nWidth, nDecimals );
+            printf( "Field %d: Type=%c/%s, Title=`%s', Width=%d, Decimals=%d\n",
+                    i, chNativeType, pszTypeName, szTitle, nWidth, nDecimals );
         }
     }
 
@@ -162,7 +173,7 @@ int main( int argc, char ** argv )
 	DBFFieldType	eType;
 
 	eType = DBFGetFieldInfo( hDBF, i, szTitle, &nWidth, &nDecimals );
-	if( strlen(szTitle) > nWidth )
+	if( (int) strlen(szTitle) > nWidth )
 	    panWidth[i] = strlen(szTitle);
 	else
 	    panWidth[i] = nWidth;
@@ -266,6 +277,7 @@ int main( int argc, char ** argv )
     }
 
     DBFClose( hDBF );
+    free( panWidth );
 
     return( 0 );
 }

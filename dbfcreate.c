@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: dbfcreate.c,v 1.6 2002/01/15 14:36:07 warmerda Exp $
+ * $Id: dbfcreate.c,v 1.7 2004-09-26 20:09:35 fwarmerdam Exp $
  *
  * Project:  Shapelib
  * Purpose:  Sample application for creating a new .dbf file.
@@ -34,6 +34,9 @@
  ******************************************************************************
  *
  * $Log: dbfcreate.c,v $
+ * Revision 1.7  2004-09-26 20:09:35  fwarmerdam
+ * avoid rcsid warnings
+ *
  * Revision 1.6  2002/01/15 14:36:07  warmerda
  * updated email address
  *
@@ -51,12 +54,11 @@
  *
  */
 
-static char rcsid[] = 
-  "$Id: dbfcreate.c,v 1.6 2002/01/15 14:36:07 warmerda Exp $";
-
 #include <stdlib.h>
 #include <string.h>
 #include "shapefil.h"
+
+SHP_CVSID("$Id: dbfcreate.c,v 1.7 2004-09-26 20:09:35 fwarmerdam Exp $")
 
 int main( int argc, char ** argv )
 

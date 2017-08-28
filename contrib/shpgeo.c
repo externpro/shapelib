@@ -32,6 +32,21 @@
  * use -DPROJ4 to compile in Projection support
  *
  * $Log: shpgeo.c,v $
+ * Revision 1.13  2011-07-24 03:17:46  fwarmerdam
+ * include string.h and stdlib.h where needed in contrib (#2146)
+ *
+ * Revision 1.12  2007-09-03 23:17:46  fwarmerdam
+ * fix SHPDimension() function
+ *
+ * Revision 1.11  2006/11/06 20:45:58  fwarmerdam
+ * Fixed SHPProject.
+ *
+ * Revision 1.10  2006/11/06 20:44:58  fwarmerdam
+ * SHPProject() uses pj_transform now
+ *
+ * Revision 1.9  2006/01/25 15:33:50  fwarmerdam
+ * fixed ppsC assignment maptools bug 1263
+ *
  * Revision 1.8  2002/01/15 14:36:56  warmerda
  * upgrade to use proj_api.h
  *
@@ -55,6 +70,8 @@
  *
  */
 
+#include <stdlib.h>
+#include <string.h>
 #include "shapefil.h"
 
 #ifndef NAN
@@ -147,41 +164,31 @@ static void * SfRealloc( void * pMem, int nNewSize )
  * **************************************************************************/ 
 int SHPProject ( SHPObject *psCShape, projPJ inproj, projPJ outproj ) {
 #ifdef	PROJ4
-   int	j;
-   projUV   p;    /* struct { double u, double v } */
 
-   /* for each vertex project it and stuff the projeted point back into 	*/
-   /*	same SHPObject.  Proj assumes data is in radians so convert it.		*/
-   /*   Proj will convert Geographic -> <proj> and <proj> -> Geographic		*/
-   /*	so <proj1> -> <proj2> requires bouncing though geographic			*/
-   
-   for ( j=0; j < psCShape->nVertices; j++ ) {
-     p.u = psCShape->padfX[j];
-     p.v = psCShape->padfY[j];
+    int    j;
 
-     if ( inproj )
-       p = pj_inv ( p, inproj );
-     else
-      { p.u *= DEG_TO_RAD;
-        p.v *= DEG_TO_RAD;
-      }
+    if ( pj_is_latlong(inproj) ) {
+        for(j=0; j < psCShape->nVertices; j++) {
+            psCShape->padfX[j] *= DEG_TO_RAD;
+            psCShape->padfY[j] *= DEG_TO_RAD;
+        }
+    }   
 
-     if ( outproj ) 
-       p = pj_fwd ( p, outproj );
-     else
-     { p.u *= RAD_TO_DEG;
-       p.v *= RAD_TO_DEG;
-     } 
+    pj_transform(inproj, outproj, psCShape->nVertices, 0, psCShape->padfX,
+                 psCShape->padfY, NULL);
 
-     psCShape->padfX[j] = p.u;
-     psCShape->padfY[j] = p.v;
-   }
-   
-   /* Recompute new Extents of projected Object								*/
-   SHPComputeExtents ( psCShape );
+    if ( pj_is_latlong(outproj) ) {
+        for(j=0; j < psCShape->nVertices; j++) {
+            psCShape->padfX[j] *= RAD_TO_DEG;
+            psCShape->padfY[j] *= RAD_TO_DEG;
+        }
+    }   
+
+    /* Recompute new Extents of projected Object								*/
+    SHPComputeExtents ( psCShape );
 #endif  
 
-   return ( 1 );
+    return ( 1 );
 }
 
 
@@ -543,8 +550,8 @@ int SHPWriteOGisPolygon ( WKBStreamObj *stream_obj, SHPObject *psCShape ) {
    nextring = 0;
    cParts=0;
    while ( nextring >= 0 ) {
-     (SHPObject*) ppsC[cParts] = SHPUnCompound ( psCShape, &nextring ); 
-     cParts++;
+       ppsC[cParts] = SHPUnCompound ( psCShape, &nextring ); 
+       cParts++;
     }
    
 #ifdef DEBUG2
@@ -828,22 +835,22 @@ int SHPDimension ( int SHPType ) {
     dimension = 0;
       
     switch ( SHPType ) {
-    	case  SHPT_POINT       :	dimension = SHPD_POINT ;
-    	case  SHPT_ARC         :	dimension = SHPD_LINE;
-    	case  SHPT_POLYGON     :	dimension = SHPD_AREA;    	
-    	case  SHPT_MULTIPOINT  :	dimension = SHPD_POINT;    	
-    	case  SHPT_POINTZ      :	dimension = SHPD_POINT | SHPD_Z;    	
-    	case  SHPT_ARCZ        :	dimension = SHPD_LINE | SHPD_Z;
-    	case  SHPT_POLYGONZ    :	dimension = SHPD_AREA | SHPD_Z;
-    	case  SHPT_MULTIPOINTZ :	dimension = SHPD_POINT | SHPD_Z;    	
-    	case  SHPT_POINTM      :	dimension = SHPD_POINT | SHPD_MEASURE;    	
-    	case  SHPT_ARCM        :	dimension = SHPD_LINE | SHPD_MEASURE;
-    	case  SHPT_POLYGONM    :	dimension = SHPD_AREA | SHPD_MEASURE;
-    	case  SHPT_MULTIPOINTM :	dimension = SHPD_POINT | SHPD_MEASURE;   	 	
-    	case  SHPT_MULTIPATCH  :	dimension = SHPD_AREA;  
+      case  SHPT_POINT       :	dimension = SHPD_POINT; break;
+      case  SHPT_ARC         :	dimension = SHPD_LINE; break;  
+      case  SHPT_POLYGON     :	dimension = SHPD_AREA; break;   	
+      case  SHPT_MULTIPOINT  :	dimension = SHPD_POINT; break;
+      case  SHPT_POINTZ      :	dimension = SHPD_POINT | SHPD_Z; break;
+      case  SHPT_ARCZ        :	dimension = SHPD_LINE | SHPD_Z; break;
+      case  SHPT_POLYGONZ    :	dimension = SHPD_AREA | SHPD_Z; break;
+      case  SHPT_MULTIPOINTZ :	dimension = SHPD_POINT | SHPD_Z; break;
+      case  SHPT_POINTM      :	dimension = SHPD_POINT | SHPD_MEASURE; break;
+      case  SHPT_ARCM        :	dimension = SHPD_LINE | SHPD_MEASURE; break;
+      case  SHPT_POLYGONM    :	dimension = SHPD_AREA | SHPD_MEASURE; break;
+      case  SHPT_MULTIPOINTM :	dimension = SHPD_POINT | SHPD_MEASURE; break;
+      case  SHPT_MULTIPATCH  :	dimension = SHPD_AREA; break;
     }
 
-   return ( dimension );
+    return ( dimension );
 }
 
 

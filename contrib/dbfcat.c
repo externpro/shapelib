@@ -4,7 +4,10 @@
  * This code is in the public domain.
  *
  * $Log: dbfcat.c,v $
- * Revision 1.1  1999/05/26 02:56:31  candrsn
+ * Revision 1.2  2011-07-24 03:17:46  fwarmerdam
+ * include string.h and stdlib.h where needed in contrib (#2146)
+ *
+ * Revision 1.1  1999-05-26 02:56:31  candrsn
  * updates to shpdxf, dbfinfo, port from Shapelib 1.1.5 of dbfcat and shpinfo
  *
  * Revision 1.3  1995/10/21  03:15:01  warmerda
@@ -16,8 +19,10 @@
  */
 
 static char rcsid[] = 
-  "$Id: dbfcat.c,v 1.1 1999/05/26 02:56:31 candrsn Exp $";
+  "$Id: dbfcat.c,v 1.2 2011-07-24 03:17:46 fwarmerdam Exp $";
 
+#include <stdlib.h>
+#include <string.h>
 #include "shapefil.h"
 
 int main( int argc, char ** argv )

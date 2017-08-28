@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: shptest.c,v 1.6 2002/01/15 14:36:07 warmerda Exp $
+ * $Id: shptest.c,v 1.7 2004-09-26 20:09:35 fwarmerdam Exp $
  *
  * Project:  Shapelib
  * Purpose:  Application for generating sample Shapefiles of various types.
@@ -35,6 +35,9 @@
  ******************************************************************************
  *
  * $Log: shptest.c,v $
+ * Revision 1.7  2004-09-26 20:09:35  fwarmerdam
+ * avoid rcsid warnings
+ *
  * Revision 1.6  2002/01/15 14:36:07  warmerda
  * updated email address
  *
@@ -55,12 +58,11 @@
  *
  */
 
-static char rcsid[] = 
-  "$Id: shptest.c,v 1.6 2002/01/15 14:36:07 warmerda Exp $";
-
 #include <stdlib.h>
 #include <string.h>
 #include "shapefil.h"
+
+SHP_CVSID("$Id: shptest.c,v 1.7 2004-09-26 20:09:35 fwarmerdam Exp $")
 
 /************************************************************************/
 /*                          Test_WritePoints()                          */

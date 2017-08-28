@@ -9,6 +9,7 @@ EXPORTS SHPOpen
 	SHPCreateObject
 	SHPCreateSimpleObject
 	SHPClose
+        SHPWriteHeader
 	SHPTypeName
 	SHPPartTypeName
 	SHPCreateTree
@@ -38,5 +39,8 @@ EXPORTS SHPOpen
 	DBFIsAttributeNULL
 	DBFWriteLogicalAttribute
 	DBFReadLogicalAttribute
-
-
+	DBFUpdateHeader
+	DBFGetNativeFieldType
+	SHPRewindObject
+	DBFIsRecordDeleted
+	DBFMarkRecordDeleted
