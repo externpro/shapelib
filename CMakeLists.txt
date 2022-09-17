@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(shapelib)
+include(GNUInstallDirs)
 include(flags OPTIONAL)
 set(lib_name shape)
 #######################################
@@ -10,26 +11,23 @@ set(${lib_name}_libsrcs
   shapefil.h
   )
 #######################################
-if(DEFINED SHAPELIB_VER)
-  set(ver _${SHAPELIB_VER})
-  set(verDir /${PROJECT_NAME}${ver})
-endif()
-#######################################
 add_library(${lib_name} STATIC ${${lib_name}_libsrcs})
 if(MSVC)
   target_compile_definitions(${lib_name} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 endif()
-target_include_directories(${lib_name} PUBLIC $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include${verDir}>)
-set_target_properties(${lib_name} PROPERTIES OUTPUT_NAME ${lib_name}${ver})
+target_include_directories(${lib_name} PUBLIC $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 #######################################
-set(targetsFile ${PROJECT_NAME}${ver}-targets)
+set(targetsFile ${PROJECT_NAME}-targets)
 install(TARGETS ${lib_name} EXPORT ${targetsFile}
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   )
-install(FILES shapefil.h DESTINATION include${verDir}/${lib_name})
+install(FILES shapefil.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${lib_name})
 if(DEFINED XP_NAMESPACE)
   set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
 endif()
-install(EXPORT ${targetsFile} DESTINATION lib/cmake ${nameSpace})
+if(NOT DEFINED XP_INSTALL_CMAKEDIR)
+  set(XP_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
+endif()
+install(EXPORT ${targetsFile} DESTINATION ${XP_INSTALL_CMAKEDIR} ${nameSpace})
