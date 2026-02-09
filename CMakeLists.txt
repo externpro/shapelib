@@ -26,7 +26,6 @@ if(DEFINED XP_NAMESPACE)
     LICENSE "[MIT or LGPL](http://shapelib.maptools.org/license.html 'MIT or LGPL License')"
     )
   set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
-  set(CMAKE_INSTALL_CMAKEDIR ${XP_INSTALL_CMAKEDIR})
 elseif(NOT DEFINED CMAKE_INSTALL_CMAKEDIR)
   set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
 endif()
