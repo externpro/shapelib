@@ -23,7 +23,7 @@ if(DEFINED XP_NAMESPACE)
     BASE 1.2.10 XPDIFF "intro"
     WEB "http://shapelib.maptools.org/" UPSTREAM "github.com/OSGeo/shapelib"
     DESC "reading, writing, updating ESRI Shapefiles"
-    LICENSE "[MIT or LGPL](http://shapelib.maptools.org/license.html 'MIT or LGPL License')"
+    LICENSE "[MIT OR LGPL-2.0-or-later](http://shapelib.maptools.org/license.html 'MIT or LGPL License')"
     )
   set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
 elseif(NOT DEFINED CMAKE_INSTALL_CMAKEDIR)
